@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ERGODOX_EZ_H
+#define ERGODOX_EZ_H
 
 #include "quantum.h"
 #include <stdint.h>
@@ -64,7 +65,8 @@ inline void ergodox_left_led_2_off(void)    { ergodox_left_led_2 = 0; }
 inline void ergodox_left_led_3_off(void)    { ergodox_left_led_3 = 0; }
 #endif // LEFT_LEDS
 
-inline void ergodox_led_all_on(void) {
+inline void ergodox_led_all_on(void)
+{
     ergodox_board_led_on();
     ergodox_right_led_1_on();
     ergodox_right_led_2_on();
@@ -98,20 +100,19 @@ inline void ergodox_right_led_set(uint8_t led, uint8_t n)  {
                  (OCR1C = n);
 }
 
-inline void ergodox_led_all_set(uint8_t n) {
+inline void ergodox_led_all_set(uint8_t n)
+{
     ergodox_right_led_1_set(n);
     ergodox_right_led_2_set(n);
     ergodox_right_led_3_set(n);
 }
 
+#ifdef ORYX_CONFIGURATOR
 enum ergodox_ez_keycodes {
     LED_LEVEL = SAFE_RANGE,
     TOGGLE_LAYER_COLOR,
     EZ_SAFE_RANGE,
 };
-
-#ifndef WEBUSB_ENABLE
-#    define WEBUSB_PAIR KC_NO
 #endif
 
 typedef union {
@@ -270,3 +271,5 @@ extern keyboard_config_t keyboard_config;
     { R05, R15, R25, R35, R45, R55 },     \
     { R06, R16, R26, R36, R46, KC_NO }    \
     }
+
+#endif
