@@ -19,7 +19,7 @@
 
 /* key matrix size */
 #define MATRIX_ROWS 2
-#define MATRIX_COLS 2
+#define MATRIX_COLS 7
 
 /*
  * Define encoder pins
@@ -39,9 +39,9 @@
  *                  ROW2COL = ROW = Anode (+), COL = Cathode (-, marked on diode)
  *
 */
-#define MATRIX_ROW_PINS { B5, B4 }//, E6, D7, C6, D4 }
-#define MATRIX_COL_PINS { D0, D1 }
+#define MATRIX_ROW_PINS { D5, B5 }//, E6, D7, C6, D4 }
+#define MATRIX_COL_PINS { D1, D0, D4, C6, D7, E6, B4 }
 #define UNUSED_PINS
 
 /* COL2ROW, ROW2COL*/
-#define DIODE_DIRECTION ROw2COL
+#define DIODE_DIRECTION COL2ROW
