@@ -13,17 +13,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
- 
-/*  _  __    _ _          _____ _     _      _                         _   _  __                                
- * | |/ /   | | |        / ____(_)   | |    | |                       | | | |/ /                                
- * | ' / ___| | |_   _  | (___  _  __| | ___| |__   ___   __ _ _ __ __| | | ' / ___ _   _ _ __ ___   __ _ _ __  
- * |  < / _ \ | | | | |  \___ \| |/ _` |/ _ \ '_ \ / _ \ / _` | '__/ _` | |  < / _ \ | | | '_ ` _ \ / _` | '_ \ 
- * | . \  __/ | | |_| |  ____) | | (_| |  __/ |_) | (_) | (_| | | | (_| | | . \  __/ |_| | | | | | | (_| | |_) |
- * |_|\_\___|_|_|\__, | |_____/|_|\__,_|\___|_.__/ \___/ \__,_|_|  \__,_| |_|\_\___|\__, |_| |_| |_|\__,_| .__/ 
- *                __/ |                                                              __/ |               | |    
- *               |___/                                                              |___/                |_|    
- */ 
 #include QMK_KEYBOARD_H
 
 #define WRAPPER KC_F23
@@ -271,28 +260,6 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 	[TD_MN] = ACTION_TAP_DANCE_FN (sendmn)
 };
 
-/* ,------+-----------------------------------------.
- * |      | 0-1 R|  2-3 |  4-5 |  6-7 |  8-9 |  A-B |
- * |------+------+------+------+------+------+------|
- * | MUTE |  C-D |  E-F |  G-H |  I-J |  K-L |  M-N |
- * |------+------+------+------+------+------+------|
- *
- * Note that the physical layout begins in ROW1, COL2. 
- * ROW1, COL1 is not connected and ROW2, COL1 triggers upon pressing the encoder. 
- *
- * All The first key code is sent upon single tap, the second key upon double tap.
- * In case of key ROW1, COL 2, a quintuple tap will set the board to flash state for easy reflashing
- *
- * All key code send events are 'wrapped' in WRAPPER (default is KC_F23), i.e. the sequence goes:
- * 
- * register wrapper
- * register key code
- * unregister key code
- * unregister wrapper
- * 
- * this procedure is used to distinguish the kelly_sideboard keys from the main keyboard in autohotkey
- *
- */ 
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT( /* Base */
@@ -301,10 +268,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   )
 };
 
-
-/*
- * Encoder 
- */
 void encoder_update_user(uint8_t index, bool clockwise) {
 	if (clockwise) {
 		tap_code(KC_VOLD);

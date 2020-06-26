@@ -1,5 +1,5 @@
 /*
-Copyright 2020 kilian
+Copyright 2020 _PeterG_
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -25,13 +25,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define RAW_USAGE_PAGE 0xFF60
 #define RAW_USAGE_ID 0x61
 #define DEVICE_VER 0x0001
-#define MANUFACTURER kilian
-#define PRODUCT krf_split_v1
-#define DESCRIPTION A custom keyboard
+#define MANUFACTURER _PeterG_
+#define PRODUCT kelly_sideboard
+#define DESCRIPTION A custom macro keyboard based on QMK	
 
 /* key matrix size */
 #define MATRIX_ROWS 2
-#define MATRIX_COLS 4
+#define MATRIX_COLS 7
+
+/*
+ * Define encoder pins
+ */
+#define ENCODERS_PAD_A { B0 }
+#define ENCODERS_PAD_B { F4 }
+#define ENCODER_RESOLUTION 4
+#define TAP_CODE_DELAY 100
 
 /*
  * Keyboard Matrix Assignments
@@ -43,8 +51,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *                  ROW2COL = ROW = Anode (+), COL = Cathode (-, marked on diode)
  *
  */
-#define MATRIX_ROW_PINS { F0, F1 }
-#define MATRIX_COL_PINS { E7, B0, B1, B2 }
+#define MATRIX_ROW_PINS { D5, B5 }
+#define MATRIX_COL_PINS { D1, D0, D4, C6, D7, E6, B4 }
 #define UNUSED_PINS
 
 /* COL2ROW, ROW2COL*/
@@ -88,7 +96,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // #endif
 
 /* Debounce reduces chatter (unintended double-presses) - set 0 if debouncing is not needed */
-#define DEBOUNCE 5
+#define DEBOUNCE 0
 
 /* define if matrix has ghost (lacks anti-ghosting diodes) */
 //#define MATRIX_HAS_GHOST
@@ -251,17 +259,3 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* Bootmagic Lite key configuration */
 // #define BOOTMAGIC_LITE_ROW 0
 // #define BOOTMAGIC_LITE_COLUMN 0
-
-
-#define FB_ERM_LRA 0
-#define FB_BRAKEFACTOR 3 /* For 1x:0, 2x:1, 3x:2, 4x:3, 6x:4, 8x:5, 16x:6, Disable Braking:7 */
-#define FB_LOOPGAIN 1 /* For  Low:0, Medium:1, High:2, Very High:3 */
-
-/* Please refer to your datasheet for the optimal setting for your specific motor. */
-#define RATED_VOLTAGE 3
-#define V_PEAK 5
-
-#define DRV_GREETING 16
-
-#define CONSOLE_IN_ENABLE
-

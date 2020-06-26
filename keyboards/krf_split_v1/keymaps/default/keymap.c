@@ -14,6 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include QMK_KEYBOARD_H
+#include "raw_hid.h"
 
 // Defines names for use in layer keycodes and the keymap
 enum layer_names {
@@ -30,8 +31,8 @@ enum custom_keycodes {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /* Base */
     [_BASE] = LAYOUT(
-        KC_A,    KC_A, KC_A,  MO(_FN),
-        KC_B,    KC_B, KC_B,  MO(_FN)
+        KC_A,    QMKBEST, KC_A,  MO(_FN),
+        KC_B,    QMKURL, KC_B,  MO(_FN)
     ),
     [_FN] = LAYOUT(
         KC_C,    KC_C, KC_C,  KC_C,
@@ -44,7 +45,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case QMKBEST:
             if (record->event.pressed) {
                 // when keycode QMKBEST is pressed
-                SEND_STRING("QMK is the best thing ever!");
+				DRV_pulse(34);
             } else {
                 // when keycode QMKBEST is released
             }
@@ -52,7 +53,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case QMKURL:
             if (record->event.pressed) {
                 // when keycode QMKURL is pressed
-                SEND_STRING("https://qmk.fm/\n");
+                raw_hid_send(0, 1);
+				uprintf("1");
+				DRV_pulse(1);
             } else {
                 // when keycode QMKURL is released
             }
@@ -74,3 +77,7 @@ bool led_update_user(led_t led_state) {
     return true;
 }
 */
+
+void raw_hid_receive(uint8_t *data, uint8_t length) {
+    raw_hid_send(data, length);
+}
