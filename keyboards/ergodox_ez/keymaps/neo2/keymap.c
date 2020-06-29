@@ -13,6 +13,7 @@
 #define SUBSC 8 // subscript letters
 #define SUPER 9 // superscript letters
 #define EMPTY 10 // media keys
+#define NPPNAV 11 // navigate in notepad++
 
 enum custom_keycodes {
 #ifdef ORYX_CONFIGURATOR
@@ -21,7 +22,9 @@ enum custom_keycodes {
   EPRM = SAFE_RANGE,
 #endif
   VRSN,
-  RGB_SLD
+  RGB_SLD,
+  NPP_LINEUP,
+  NPP_LINEDN
 };
 
 
@@ -399,7 +402,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
  * |        | PgUp |  BSPC|  up  |  del | PgDn |      |           |      |      |      |      |      |      |        |
  * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * |        | home | left | dwn  | right| end  |------|           |------|      |      |      |      |      |        |
+ * |        | home | left | dwn  | right| end  |------|           |------|      |      |      |      |      | nppnav |
  * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
  * |        | ESC  |  TAB |  INS |ENTER | undo |      |           |      |      |      |      |      |      |        |
  * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
@@ -426,7 +429,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // right hand
   KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
   KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-           KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+           KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, MO(NPPNAV),
   KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
                     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
   KC_TRNS, KC_TRNS,
@@ -678,6 +681,48 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_TRNS, KC_TRNS, X(SUP_0)
 ),
 
+/* Keymap 09: NPPNAV
+ *
+ * ,--------------------------------------------------.           ,--------------------------------------------------.
+ * |        |      |      |      |      |      |      |           |      |      |      |      |      |      |        |
+ * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
+ * |        |      |      |LN UP |      |      |      |           |      |      |      |      |      |      |        |
+ * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
+ * |        |prev T|      |LN DN |      |next T|------|           |------|      |      |      |      |      |        |
+ * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
+ * |        |      |      |      |      |      |      |           |      |      |      |      |      |      |        |
+ * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
+ *   |      |      |      |      |      |                                       |      |      |      |      |      |
+ *   `----------------------------------'                                       `----------------------------------'
+ *                                        ,-------------.       ,-------------.
+ *                                        |      |      |       |      |      |
+ *                                 ,------|------|------|       |------+------+------.
+ *                                 | oth  |      |      |       |      |      |      |
+ *                                 |  er  |      |------|       |------|      |      |
+ *                                 | view |      |      |       |      |      |      |
+ *                                 `--------------------'       `--------------------'
+ */
+[NPPNAV] = LAYOUT_ergodox(
+  // left hand
+  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+  KC_TRNS, KC_TRNS, KC_TRNS, NPP_LINEUP, KC_TRNS, KC_TRNS, KC_TRNS,
+  KC_TRNS, C(KC_PGUP), KC_TRNS, NPP_LINEDN, KC_TRNS, C(KC_PGDN),
+  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+                                               KC_TRNS, KC_TRNS,
+                                                        KC_TRNS,
+                                      KC_F8, KC_TRNS, KC_TRNS,
+  // right hand
+  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+           KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+                    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+  KC_TRNS, KC_TRNS,
+  KC_TRNS,
+  KC_TRNS, KC_TRNS, KC_TRNS
+),
+
 /* Keymap 09: EMPTY
  *
  * ,--------------------------------------------------.           ,--------------------------------------------------.
@@ -870,7 +915,6 @@ void matrix_scan_user(void) {
   }
 }
 
-
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   if (record->event.pressed) {
     switch (keycode) {
@@ -879,12 +923,19 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         return false;
       case VRSN:
         SEND_STRING (QMK_KEYBOARD "/" QMK_KEYMAP " @ " QMK_VERSION);
-        return false;
+        return false;	
+	  case NPP_LINEUP:
+		SEND_STRING (SS_LCTL("t"));
+		SEND_STRING (SS_TAP(X_UP));
+		return false;
+	  case NPP_LINEDN:
+		SEND_STRING (SS_TAP(X_DOWN));
+		SEND_STRING (SS_LCTL("t"));
       #ifdef RGBLIGHT_ENABLE
       case RGB_SLD:
         rgblight_mode(1);
         return false;
-      #endif
+      #endif	  
     }
   }
   return true;
