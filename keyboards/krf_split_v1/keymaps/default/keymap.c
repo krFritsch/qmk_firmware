@@ -45,7 +45,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case QMKBEST:
             if (record->event.pressed) {
                 // when keycode QMKBEST is pressed
-				DRV_pulse(34);
+				DRV_rtp_init();
+				DRV_pulse(16);
             } else {
                 // when keycode QMKBEST is released
             }

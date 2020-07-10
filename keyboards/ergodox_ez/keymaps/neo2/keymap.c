@@ -14,6 +14,7 @@
 #define SUPER 9 // superscript letters
 #define EMPTY 10 // media keys
 #define NPPNAV 11 // navigate in notepad++
+#define GAME 12 // Gaming layer
 
 enum custom_keycodes {
 #ifdef ORYX_CONFIGURATOR
@@ -24,7 +25,9 @@ enum custom_keycodes {
   VRSN,
   RGB_SLD,
   NPP_LINEUP,
-  NPP_LINEDN
+  NPP_LINEDN,
+  G_JTHRW,
+  VIBE
 };
 
 
@@ -243,7 +246,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                DE_S,    DE_N,   DE_R    , DE_T  , DE_D, LT(RightM3, DE_Y)  ,
   C(DE_Y)    , DE_B,    DE_M,   KC_COMMA, KC_DOT, DE_J, KC_RSFT            ,
   MO(RightM4), KC_RGUI, KC_APP, KC_TRNS , KC_ENT,
-  KC_TRNS    , KC_TRNS,
+  VIBE       , KC_TRNS,
   KC_TRNS    ,
   MO(GREEK)  , KC_LEAD, KC_SPACE
 ),
@@ -683,6 +686,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Keymap 09: NPPNAV
  *
+ *  _   _       _                       _               
+ * | \ | |     | |                     | |    _     _   
+ * |  \| | ___ | |_ ___ _ __   __ _  __| |  _| |_ _| |_ 
+ * | . ` |/ _ \| __/ _ \ '_ \ / _` |/ _` | |_   _|_   _|
+ * | |\  | (_) | ||  __/ |_) | (_| | (_| |   |_|   |_|  
+ * |_| \_|\___/ \__\___| .__/ \__,_|\__,_|              
+ *                     | |                              
+ *                     |_|     
+ * 
  * ,--------------------------------------------------.           ,--------------------------------------------------.
  * |        |      |      |      |      |      |      |           |      |      |      |      |      |      |        |
  * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
@@ -721,6 +733,56 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_TRNS, KC_TRNS,
   KC_TRNS,
   KC_TRNS, KC_TRNS, KC_TRNS
+),
+
+/* Keymap 09: GAME
+ *   _____                 _             
+ *  / ____|               (_)            
+ * | |  __  __ _ _ __ ___  _ _ __   __ _ 
+ * | | |_ |/ _` | '_ ` _ \| | '_ \ / _` |
+ * | |__| | (_| | | | | | | | | | | (_| |
+ *  \_____|\__,_|_| |_| |_|_|_| |_|\__, |
+ *                                  __/ |
+ *                                 |___/
+ * 
+ * ,--------------------------------------------------.           ,--------------------------------------------------.
+ * |  ΧΧΧΧ  |  1   |  2   |  3   |  4   |  5   | ΧΧΧΧ |           |TO(0) | ΧΧΧΧ |  F9  |  F10 |  F11 |  F12 | ΧΧΧΧ   |
+ * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
+ * |  Tab   |  Q   |  W   |  E   |  R   |  T   | ΧΧΧΧ |           | ΧΧΧΧ | ΧΧΧΧ |  F5  |  F6  |  F7  |  F8  | ΧΧΧΧ   |
+ * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
+ * | ΧΧΧΧ   |  A   |  S   |  D   |  F   |  G   |------|           |------| ΧΧΧΧ |  F1  |  F2  |  F3  |  F4  | ΧΧΧΧ   |
+ * |--------+------+------+------+------+------| ΧΧΧΧ |           | ΧΧΧΧ |------+------+------+------+------+--------|
+ * | LShift |  Y   |  X   |  C   |  V   |  B   |      |           |      |  6   |  7   |  8   |  9   |  0   | ΧΧΧΧ   |
+ * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
+ *   | CTL  | ΧΧΧΧ | ΧΧΧΧ | ΧΧΧΧ | ΧΧΧΧ |                                       | ΧΧΧΧ | ΧΧΧΧ | ΧΧΧΧ | ΧΧΧΧ | ΧΧΧΧ |
+ *   `----------------------------------'                                       `----------------------------------'
+ *                                        ,-------------.       ,-------------.
+ *                                        | ΧΧΧΧ | ESC  |       |  I   |  K   |
+ *                                 ,------|------|------|       |------+------+------.
+ *                                 |      |      | ΧΧΧΧ |       |  O   |  L   |  J   |
+ *                                 | SPC  |JTHRW |------|       |------|      |      |
+ *                                 |      |      | ΧΧΧΧ |       |  P   |      |      |
+ *                                 `--------------------'       `--------------------'
+ */
+[GAME] = LAYOUT_ergodox(
+  // left hand
+  KC_NO   , KC_1    , KC_2    , KC_3    , KC_4    , KC_5    , KC_NO   ,
+  KC_TAB  , KC_Q    , KC_W    , KC_E    , KC_R    , KC_T    , KC_NO   ,
+  KC_NO   , KC_A    , KC_S    , KC_D    , KC_F    , KC_G    ,
+  KC_LSFT , KC_Y    , KC_X    , KC_C    , KC_V    , KC_B    , KC_NO   ,
+  KC_LCTL , KC_NO   , KC_NO   , KC_NO   , KC_NO   ,
+                                                    KC_NO   , KC_ESC   ,
+                                                              KC_NO   ,
+                                          KC_SPACE, G_JTHRW , KC_NO   ,
+  // right hand
+  TO(0)   , KC_NO   , KC_F9   , KC_F10  , KC_F11  , KC_F12  , KC_NO   ,
+  KC_NO   , KC_NO   , KC_F5   , KC_F6   , KC_F7   , KC_F8   , KC_NO   ,
+            KC_NO   , KC_F1   , KC_F2   , KC_F3   , KC_F4   , KC_NO   ,
+  KC_NO   , KC_6    , KC_7    , KC_8    , KC_9    , KC_0    , KC_NO   ,
+                      KC_NO   , KC_NO   , KC_NO   , KC_NO   , KC_NO   ,
+  KC_I    , KC_K    ,
+  KC_O    ,
+  KC_P    , KC_L    , KC_J
 ),
 
 /* Keymap 09: EMPTY
@@ -784,7 +846,11 @@ void matrix_scan_user(void) {
   LEADER_DICTIONARY() {
     leading = false;
     leader_end();
-	
+	/*
+	 *
+	 * Leader key sequences to controll the keyboard
+	 *
+	 */
 	SEQ_THREE_KEYS(KC_S, KC_U, KC_B) {
       // LEAD + S U B
 		layer_on(SUBSC);
@@ -793,29 +859,15 @@ void matrix_scan_user(void) {
       // LEAD + S U P
 		layer_on(SUPER);
 	}
-	
-    SEQ_ONE_KEY(KC_Q) {
-      // Send Alt + F4
-       register_code(KC_LALT);
-       register_code(KC_F4);
-       unregister_code(KC_F4);
-       unregister_code(KC_LALT);	
-	}
-    SEQ_TWO_KEYS(KC_S, KC_T) {
-      // Search open tabs in firefox
-       register_code(KC_F24);
-       register_code(KC_A);
-       unregister_code(KC_A);
-       unregister_code(KC_F24);	   
+	SEQ_THREE_KEYS(KC_G, KC_G, KC_G) {
+      // LEAD + G A M E
+		layer_on(GAME);
     }
-    SEQ_TWO_KEYS(KC_N, KC_L) {
-      // Toggle windosw night light
-       register_code(KC_F24);
-       register_code(KC_B);
-       unregister_code(KC_B);
-       unregister_code(KC_F24);	   
-    }
-	
+	/*
+	 *
+	 * Leader key sequences for autohotkey
+	 *
+	 */
     SEQ_FOUR_KEYS(KC_T, KC_E, KC_S, KC_T) {
       // LEAD + T E S T
        register_code(KC_F24);
@@ -871,7 +923,21 @@ void matrix_scan_user(void) {
        register_code(KC_7);
        unregister_code(KC_7);
        unregister_code(KC_F24);
-    }	
+    }
+    SEQ_TWO_KEYS(KC_S, KC_T) {
+      // Search open tabs in firefox
+       register_code(KC_F24);
+       register_code(KC_A);
+       unregister_code(KC_A);
+       unregister_code(KC_F24);	   
+    }
+    SEQ_TWO_KEYS(KC_N, KC_L) {
+      // Toggle windosw night light
+       register_code(KC_F24);
+       register_code(KC_B);
+       unregister_code(KC_B);
+       unregister_code(KC_F24);	   
+    }
     SEQ_THREE_KEYS(KC_T, KC_E, KC_X) {
       // LEAD + W E B
        register_code(KC_F24);
@@ -879,6 +945,25 @@ void matrix_scan_user(void) {
        unregister_code(KC_C);
        unregister_code(KC_F24);
     }
+    SEQ_ONE_KEY(KC_P) {
+      // LEAD + P
+       register_code(KC_F24);
+       register_code(KC_D);
+       unregister_code(KC_D);
+       unregister_code(KC_F24);	   
+    }
+	/*
+	 *
+	 * Leader key sequences for string output
+	 *
+	 */
+    SEQ_ONE_KEY(KC_Q) {
+      // Send Alt + F4
+       register_code(KC_LALT);
+       register_code(KC_F4);
+       unregister_code(KC_F4);
+       unregister_code(KC_LALT);	
+	}
 	SEQ_FIVE_KEYS(KC_E, KC_S, KC_H, KC_I, KC_T) {
       // LEAD + E S H I T
 		send_unicode_string("💩");
@@ -907,6 +992,10 @@ void matrix_scan_user(void) {
       // LEAD + E S M L I
 		send_unicode_string("😀");
 	}
+    SEQ_THREE_KEYS(KC_M, KC_F, KC_G) {
+      // LEAD + M F G
+      SEND_STRING("Mit freundlichen Grn"SS_TAP(X_ENTER)"Kilian Fritsch");
+    }
 	SEQ_FIVE_KEYS(KC_R, KC_E, KC_S, KC_E, KC_T) {
       // LEAD + R E S E T
       SEND_STRING("RESETTING THE KEYBOARD!");
@@ -931,6 +1020,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 	  case NPP_LINEDN:
 		SEND_STRING (SS_TAP(X_DOWN));
 		SEND_STRING (SS_LCTL("t"));
+		return false;
+	  case VIBE:
+		DRV_pulse(34);
+		return false;
+	  case G_JTHRW:
+		SEND_STRING (SS_TAP(X_SPACE));
+		SEND_STRING (SS_TAP(X_BTN1));
+		return false;
       #ifdef RGBLIGHT_ENABLE
       case RGB_SLD:
         rgblight_mode(1);
@@ -940,6 +1037,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   }
   return true;
 }
+
+/* void keyboard_post_init_user(void) {
+  // Customise these values to desired behaviour
+  debug_enable=true;
+  debug_matrix=true;
+  //debug_keyboard=true;
+  //debug_mouse=true;
+} */
 
 // Runs just one time when the keyboard initializes.
 void matrix_init_user(void) {
@@ -967,51 +1072,22 @@ layer_state_t layer_state_set_user(layer_state_t state) {
         #endif
         #endif
         break;
-      case 1:
+      case GAME:
         ergodox_right_led_1_on();
         #ifdef RGBLIGHT_COLOR_LAYER_1
           rgblight_setrgb(RGBLIGHT_COLOR_LAYER_1);
         #endif
         break;
-      case 2:
+      case SUBSC:
         ergodox_right_led_2_on();
-        #ifdef RGBLIGHT_COLOR_LAYER_2
-          rgblight_setrgb(RGBLIGHT_COLOR_LAYER_2);
+        #ifdef RGBLIGHT_COLOR_LAYER_1
+          rgblight_setrgb(RGBLIGHT_COLOR_LAYER_1);
         #endif
         break;
-      case 3:
+      case SUPER:
         ergodox_right_led_3_on();
-        #ifdef RGBLIGHT_COLOR_LAYER_3
-          rgblight_setrgb(RGBLIGHT_COLOR_LAYER_3);
-        #endif
-        break;
-      case 4:
-        ergodox_right_led_1_on();
-        ergodox_right_led_2_on();
-        #ifdef RGBLIGHT_COLOR_LAYER_4
-          rgblight_setrgb(RGBLIGHT_COLOR_LAYER_4);
-        #endif
-        break;
-      case 5:
-        ergodox_right_led_1_on();
-        ergodox_right_led_3_on();
-        #ifdef RGBLIGHT_COLOR_LAYER_5
-          rgblight_setrgb(RGBLIGHT_COLOR_LAYER_5);
-        #endif
-        break;
-      case 6:
-        ergodox_right_led_2_on();
-        ergodox_right_led_3_on();
-        #ifdef RGBLIGHT_COLOR_LAYER_6
-          rgblight_setrgb(RGBLIGHT_COLOR_LAYER_6);
-        #endif
-        break;
-      case 7:
-        ergodox_right_led_1_on();
-        ergodox_right_led_2_on();
-        ergodox_right_led_3_on();
-        #ifdef RGBLIGHT_COLOR_LAYER_7
-          rgblight_setrgb(RGBLIGHT_COLOR_LAYER_7);
+        #ifdef RGBLIGHT_COLOR_LAYER_1
+          rgblight_setrgb(RGBLIGHT_COLOR_LAYER_1);
         #endif
         break;
       default:
