@@ -158,7 +158,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // haptic feedback stuff
 #define FB_ERM_LRA 0
-#define FB_BRAKEFACTOR 6 /* For 1x:0, 2x:1, 3x:2, 4x:3, 6x:4, 8x:5, 16x:6, Disable Braking:7 */
+#define FB_BRAKEFACTOR 2 /* For 1x:0, 2x:1, 3x:2, 4x:3, 6x:4, 8x:5, 16x:6, Disable Braking:7 */
 #define FB_LOOPGAIN 0 /* For  Low:0, Medium:1, High:2, Very High:3 */
 
 /* Please refer to your datasheet for the optimal setting for your specific motor. */
@@ -167,6 +167,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define ERM_OPEN_LOOP 1
 
 
-#define DRV_GREETING 16
+// #define DRV_GREETING 94 		/* transition_rampup_med_smooth1 */ 
+#define DRV_LEADER_FAIL 53 		/* pulsing_strong_80 */
+#define DRV_LEADER_SUCCESS 26	/* sharp_tick3_60 */
+#define DRV_RESET_KEYBOARD 94	/* transition_rampdown_long_smooth1_50 */
+
 
 #endif

@@ -16,6 +16,9 @@
 #define NPPNAV 11 // navigate in notepad++
 #define GAME 12 // Gaming layer
 
+bool leading_success;
+uint8_t motor_sequence;
+
 enum custom_keycodes {
 #ifdef ORYX_CONFIGURATOR
   EPRM = EZ_SAFE_RANGE,
@@ -27,7 +30,9 @@ enum custom_keycodes {
   NPP_LINEUP,
   NPP_LINEDN,
   G_JTHRW,
-  VIBE
+  VIBE,
+  INC,
+  DEC
 };
 
 
@@ -216,7 +221,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
  * |CTL/Tab |   X  |   V  |   L  |   C  |   W  |FKeys |           |  ^Z  |   K  |   H  |   G  |   F  |   Q  | CTL/ß  |
  * |--------+------+------+------+------+------|      |           |(undo)|------+------+------+------+------+--------|
- * |   L3   |   U  |   I  |   A  |   E  |   O  |------|           |------|   S  |   N  |   R  |   T  |   D  |   L3   |
+ * |   L3   |   U  |   I  |   A  |   E  |   O  |------|           |------|   S  |   N  |   R  |   T  |   D  |  L3/Y  |
  * |--------+------+------+------+------+------| None |           |  ^Y  |------+------+------+------+------+--------|
  * | LShift |   Ü  |   Ö  |   Ä  |   P  |   Z  |      |           |(redo)|   B  |   M  |   ,  |   .  |   J  | RShift |
  * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
@@ -246,8 +251,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                DE_S,    DE_N,   DE_R    , DE_T  , DE_D, LT(RightM3, DE_Y)  ,
   C(DE_Y)    , DE_B,    DE_M,   KC_COMMA, KC_DOT, DE_J, KC_RSFT            ,
   MO(RightM4), KC_RGUI, KC_APP, KC_TRNS , KC_ENT,
-  VIBE       , KC_TRNS,
-  KC_TRNS    ,
+  INC       , VIBE,
+  DEC    ,
   MO(GREEK)  , KC_LEAD, KC_SPACE
 ),
 /* Keymap 01: Modifier 3 pressed LEFT
@@ -845,7 +850,7 @@ LEADER_EXTERNS();
 void matrix_scan_user(void) {
   LEADER_DICTIONARY() {
     leading = false;
-    leader_end();
+	leading_success = false;
 	/*
 	 *
 	 * Leader key sequences to controll the keyboard
@@ -854,14 +859,23 @@ void matrix_scan_user(void) {
 	SEQ_THREE_KEYS(KC_S, KC_U, KC_B) {
       // LEAD + S U B
 		layer_on(SUBSC);
+		leading_success = true;
 	}
 	SEQ_THREE_KEYS(KC_S, KC_U, KC_P) {
       // LEAD + S U P
 		layer_on(SUPER);
+		leading_success = true;
 	}
 	SEQ_THREE_KEYS(KC_G, KC_G, KC_G) {
       // LEAD + G A M E
 		layer_on(GAME);
+		leading_success = true;
+    }
+	SEQ_THREE_KEYS(KC_N, KC_U, KC_M) {
+      // LEAD + N U M
+        register_code(KC_NUMLOCK);
+        unregister_code(KC_NUMLOCK);
+		leading_success = true;
     }
 	/*
 	 *
@@ -874,6 +888,7 @@ void matrix_scan_user(void) {
        register_code(KC_0);
        unregister_code(KC_0);
        unregister_code(KC_F24);
+	   leading_success = true;
     }
     SEQ_FOUR_KEYS(KC_F, KC_I, KC_L, KC_E) {
       // LEAD + F I L E
@@ -881,6 +896,7 @@ void matrix_scan_user(void) {
        register_code(KC_1);
        unregister_code(KC_1);
        unregister_code(KC_F24);
+	   leading_success = true;
     }
     SEQ_THREE_KEYS(KC_W, KC_E, KC_B) {
       // LEAD + W E B
@@ -888,6 +904,7 @@ void matrix_scan_user(void) {
        register_code(KC_2);
        unregister_code(KC_2);
        unregister_code(KC_F24);
+	   leading_success = true;
     }
     SEQ_FOUR_KEYS(KC_M, KC_A, KC_I, KC_L) {
       // LEAD + M A I L
@@ -895,6 +912,7 @@ void matrix_scan_user(void) {
        register_code(KC_3);
        unregister_code(KC_3);
        unregister_code(KC_F24);
+	   leading_success = true;
     }
     SEQ_FOUR_KEYS(KC_P, KC_A, KC_S, KC_S) {
       // LEAD + P A S S
@@ -902,6 +920,7 @@ void matrix_scan_user(void) {
        register_code(KC_4);
        unregister_code(KC_4);
        unregister_code(KC_F24);
+	   leading_success = true;
     }
     SEQ_THREE_KEYS(KC_N, KC_P, KC_P) {
       // LEAD + N P P 
@@ -909,6 +928,7 @@ void matrix_scan_user(void) {
        register_code(KC_5);
        unregister_code(KC_5);
        unregister_code(KC_F24);
+	   leading_success = true;
     }
     SEQ_FOUR_KEYS(KC_N, KC_O, KC_T, KC_E) {
       // LEAD + N O T E
@@ -916,6 +936,7 @@ void matrix_scan_user(void) {
        register_code(KC_6);
        unregister_code(KC_6);
        unregister_code(KC_F24);
+	   leading_success = true;
     }
     SEQ_FOUR_KEYS(KC_G, KC_W, KC_E, KC_B) {
       // LEAD + G W E B
@@ -923,6 +944,7 @@ void matrix_scan_user(void) {
        register_code(KC_7);
        unregister_code(KC_7);
        unregister_code(KC_F24);
+	   leading_success = true;
     }
     SEQ_TWO_KEYS(KC_S, KC_T) {
       // Search open tabs in firefox
@@ -930,6 +952,7 @@ void matrix_scan_user(void) {
        register_code(KC_A);
        unregister_code(KC_A);
        unregister_code(KC_F24);	   
+	   leading_success = true;
     }
     SEQ_TWO_KEYS(KC_N, KC_L) {
       // Toggle windosw night light
@@ -937,6 +960,7 @@ void matrix_scan_user(void) {
        register_code(KC_B);
        unregister_code(KC_B);
        unregister_code(KC_F24);	   
+	   leading_success = true;
     }
     SEQ_THREE_KEYS(KC_T, KC_E, KC_X) {
       // LEAD + W E B
@@ -944,6 +968,7 @@ void matrix_scan_user(void) {
        register_code(KC_C);
        unregister_code(KC_C);
        unregister_code(KC_F24);
+	   leading_success = true;
     }
     SEQ_ONE_KEY(KC_P) {
       // LEAD + P
@@ -951,6 +976,7 @@ void matrix_scan_user(void) {
        register_code(KC_D);
        unregister_code(KC_D);
        unregister_code(KC_F24);	   
+	   leading_success = true;
     }
 	/*
 	 *
@@ -963,45 +989,64 @@ void matrix_scan_user(void) {
        register_code(KC_F4);
        unregister_code(KC_F4);
        unregister_code(KC_LALT);	
+	   leading_success = true;
 	}
 	SEQ_FIVE_KEYS(KC_E, KC_S, KC_H, KC_I, KC_T) {
       // LEAD + E S H I T
 		send_unicode_string("💩");
+		leading_success = true;
 	}
 	SEQ_FIVE_KEYS(KC_E, KC_T, KC_H, KC_U, KC_P) {
       // LEAD + E T H U P
 		send_unicode_string("👍");
+		leading_success = true;
 	}
 	SEQ_FIVE_KEYS(KC_E, KC_T, KC_H, KC_D, KC_N) {
       // LEAD + E T H D N
 		send_unicode_string("👎");
+		leading_success = true;
 	}
 	SEQ_FIVE_KEYS(KC_E, KC_C, KC_L, KC_A, KC_P) {
       // LEAD + E C L A P
 		send_unicode_string("👏");
+		leading_success = true;
 	}
 	SEQ_THREE_KEYS(KC_E, KC_O, KC_K) {
       // LEAD + E O K
 		send_unicode_string("👌");
+		leading_success = true;
 	}
 	SEQ_FIVE_KEYS(KC_E, KC_W, KC_N, KC_K, KC_I) {
       // LEAD + E W N K I
 		send_unicode_string("😉");
+		leading_success = true;
 	}
 	SEQ_FIVE_KEYS(KC_E, KC_S, KC_M, KC_L, KC_I) {
       // LEAD + E S M L I
 		send_unicode_string("😀");
+		leading_success = true;
 	}
     SEQ_THREE_KEYS(KC_M, KC_F, KC_G) {
       // LEAD + M F G
       SEND_STRING("Mit freundlichen Grn"SS_TAP(X_ENTER)"Kilian Fritsch");
+	  leading_success = true;
     }
 	SEQ_FIVE_KEYS(KC_R, KC_E, KC_S, KC_E, KC_T) {
       // LEAD + R E S E T
-      SEND_STRING("RESETTING THE KEYBOARD!");
+	  DRV_pulse(DRV_RESET_KEYBOARD);
+	  leading_success = true;
       reset_keyboard();
     }
+	leader_end();
   }
+}
+
+void leader_end(void) {
+	if (leading_success) {
+		DRV_pulse(DRV_LEADER_SUCCESS);
+	} else {
+		DRV_pulse(DRV_LEADER_FAIL);
+	}
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -1020,9 +1065,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 	  case NPP_LINEDN:
 		SEND_STRING (SS_TAP(X_DOWN));
 		SEND_STRING (SS_LCTL("t"));
-		return false;
-	  case VIBE:
-		DRV_pulse(34);
 		return false;
 	  case G_JTHRW:
 		SEND_STRING (SS_TAP(X_SPACE));

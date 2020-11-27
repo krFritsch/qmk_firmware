@@ -45,8 +45,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case QMKBEST:
             if (record->event.pressed) {
                 // when keycode QMKBEST is pressed
-				DRV_rtp_init();
-				DRV_pulse(16);
             } else {
                 // when keycode QMKBEST is released
             }
@@ -54,9 +52,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case QMKURL:
             if (record->event.pressed) {
                 // when keycode QMKURL is pressed
-                raw_hid_send(0, 1);
-				uprintf("1");
-				DRV_pulse(1);
             } else {
                 // when keycode QMKURL is released
             }
@@ -65,11 +60,32 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 
-/*
-void matrix_init_user(void) {
 
+#ifdef OLED_DRIVER_ENABLE
+void oled_task_user(void) {
+    // Host Keyboard Layer Status
+    oled_write_P(PSTR("Layer: "), false);
+
+    switch (get_highest_layer(layer_state)) {
+        case _BASE:
+            oled_write_P(PSTR("Default\n"), false);
+            break;
+        case _FN:
+            oled_write_P(PSTR("FN\n"), false);
+            break;
+        default:
+            // Or use the write_ln shortcut over adding '\n' to the end of your string
+            oled_write_ln_P(PSTR("Undefined"), false);
+    }
+}
+#endif
+
+oled_rotation_t oled_init_user(oled_rotation_t rotation) { return OLED_ROTATION_180; }
+
+void matrix_init_user(void) {
 }
 
+/*
 void matrix_scan_user(void) {
 
 }
