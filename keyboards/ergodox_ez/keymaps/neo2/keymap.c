@@ -32,9 +32,22 @@ enum custom_keycodes {
   G_JTHRW,
   VIBE,
   INC,
-  DEC
+  DEC,
+  M_0,
+  M_1,
+  M_2,
+  M_3,
+  M_4,
+  M_5,
+  M_6,
+  M_7,
+  M_8,
+  M_9,
+  M_A,
+  M_B
 };
 
+#define WRAPPER KC_F24
 
 enum unicode_names {
     GK_alp,
@@ -221,11 +234,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
  * |CTL/Tab |   X  |   V  |   L  |   C  |   W  |FKeys |           |  ^Z  |   K  |   H  |   G  |   F  |   Q  | CTL/ß  |
  * |--------+------+------+------+------+------|      |           |(undo)|------+------+------+------+------+--------|
- * |   L3   |   U  |   I  |   A  |   E  |   O  |------|           |------|   S  |   N  |   R  |   T  |   D  |  L3/Y  |
+ * |   L3   |   U  |   I  |   A  |   E  |   O  |------|           |------|   S  |   N  |   R  |   T  |   D  |  Y     |
  * |--------+------+------+------+------+------| None |           |  ^Y  |------+------+------+------+------+--------|
  * | LShift |   Ü  |   Ö  |   Ä  |   P  |   Z  |      |           |(redo)|   B  |   M  |   ,  |   .  |   J  | RShift |
  * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   | L4 |  +#S  | None | GUI | LALT |                                       |  L4  | GUI |  APP  |  None  | Enter |
+ *   | L4 |  +#S  | None | GUI | LALT |                                       |  L4  | GUI |  APP  |  Enter  | L3 |
  *   `----------------------------------'                                       `----------------------------------'
  *                                        ,-------------.       ,-------------.
  *                                        | None | None |       | None |  None  |
@@ -237,7 +250,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [BASE] = LAYOUT_ergodox(
   // left hand
-  KC_ESC              , DE_1      , DE_2   , DE_3   , DE_4   , DE_5, LCMD(DE_L),
+  KC_ESC              , M_1       , M_2    , M_3    , M_4    , M_5,  M_6       ,
   MT(MOD_LCTL, KC_TAB), DE_X      , DE_V   , DE_L   , DE_C   , DE_W, MO(FKeys) ,
   MO(LeftM3)          , DE_U      , DE_I   , DE_A   , DE_E   , DE_O            ,
   KC_LSFT             , DE_UDIA   , DE_ODIA, DE_ADIA, DE_P   , DE_Z, KC_TRNS   ,
@@ -246,11 +259,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                                         KC_TRNS,
                                      LCTL(KC_BSPC), LT(MOUSE, KC_TRNS), MO(GREEK),
   // right hand
-  C(A(DE_A)) , DE_6,    DE_7,   DE_8    , DE_9  , DE_0, KC_BSPC            ,
+  M_7        , M_8 ,    M_9,     M_0   ,  M_A,    M_B,  KC_BSPC            ,
   C(DE_Z)    , DE_K,    DE_H,   DE_G    , DE_F  , DE_Q, MT(MOD_RCTL, DE_SS),
-               DE_S,    DE_N,   DE_R    , DE_T  , DE_D, LT(RightM3, DE_Y)  ,
+               DE_S,    DE_N,   DE_R    , DE_T  , DE_D, DE_Y,
   C(DE_Y)    , DE_B,    DE_M,   KC_COMMA, KC_DOT, DE_J, KC_RSFT            ,
-  MO(RightM4), KC_RGUI, KC_APP, KC_TRNS , KC_ENT,
+  MO(RightM4), KC_RGUI, KC_APP, KC_ENT , MO(RightM3),
   INC       , VIBE,
   DEC    ,
   MO(GREEK)  , KC_LEAD, KC_SPACE
@@ -884,98 +897,98 @@ void matrix_scan_user(void) {
 	 */
     SEQ_FOUR_KEYS(KC_T, KC_E, KC_S, KC_T) {
       // LEAD + T E S T
-       register_code(KC_F24);
+       register_code(WRAPPER);
        register_code(KC_0);
        unregister_code(KC_0);
-       unregister_code(KC_F24);
+       unregister_code(WRAPPER);
 	   leading_success = true;
     }
     SEQ_FOUR_KEYS(KC_F, KC_I, KC_L, KC_E) {
       // LEAD + F I L E
-       register_code(KC_F24);
+       register_code(WRAPPER);
        register_code(KC_1);
        unregister_code(KC_1);
-       unregister_code(KC_F24);
+       unregister_code(WRAPPER);
 	   leading_success = true;
     }
     SEQ_THREE_KEYS(KC_W, KC_E, KC_B) {
       // LEAD + W E B
-       register_code(KC_F24);
+       register_code(WRAPPER);
        register_code(KC_2);
        unregister_code(KC_2);
-       unregister_code(KC_F24);
+       unregister_code(WRAPPER);
 	   leading_success = true;
     }
     SEQ_FOUR_KEYS(KC_M, KC_A, KC_I, KC_L) {
       // LEAD + M A I L
-       register_code(KC_F24);
+       register_code(WRAPPER);
        register_code(KC_3);
        unregister_code(KC_3);
-       unregister_code(KC_F24);
+       unregister_code(WRAPPER);
 	   leading_success = true;
     }
     SEQ_FOUR_KEYS(KC_P, KC_A, KC_S, KC_S) {
       // LEAD + P A S S
-       register_code(KC_F24);
+       register_code(WRAPPER);
        register_code(KC_4);
        unregister_code(KC_4);
-       unregister_code(KC_F24);
+       unregister_code(WRAPPER);
 	   leading_success = true;
     }
     SEQ_THREE_KEYS(KC_N, KC_P, KC_P) {
       // LEAD + N P P 
-       register_code(KC_F24);
+       register_code(WRAPPER);
        register_code(KC_5);
        unregister_code(KC_5);
-       unregister_code(KC_F24);
+       unregister_code(WRAPPER);
 	   leading_success = true;
     }
     SEQ_FOUR_KEYS(KC_N, KC_O, KC_T, KC_E) {
       // LEAD + N O T E
-       register_code(KC_F24);
+       register_code(WRAPPER);
        register_code(KC_6);
        unregister_code(KC_6);
-       unregister_code(KC_F24);
+       unregister_code(WRAPPER);
 	   leading_success = true;
     }
     SEQ_FOUR_KEYS(KC_G, KC_W, KC_E, KC_B) {
       // LEAD + G W E B
-       register_code(KC_F24);
+       register_code(WRAPPER);
        register_code(KC_7);
        unregister_code(KC_7);
-       unregister_code(KC_F24);
+       unregister_code(WRAPPER);
 	   leading_success = true;
     }
     SEQ_TWO_KEYS(KC_S, KC_T) {
       // Search open tabs in firefox
-       register_code(KC_F24);
+       register_code(WRAPPER);
        register_code(KC_A);
        unregister_code(KC_A);
-       unregister_code(KC_F24);	   
+       unregister_code(WRAPPER);	   
 	   leading_success = true;
     }
     SEQ_TWO_KEYS(KC_N, KC_L) {
       // Toggle windosw night light
-       register_code(KC_F24);
+       register_code(WRAPPER);
        register_code(KC_B);
        unregister_code(KC_B);
-       unregister_code(KC_F24);	   
+       unregister_code(WRAPPER);	   
 	   leading_success = true;
     }
     SEQ_THREE_KEYS(KC_T, KC_E, KC_X) {
       // LEAD + W E B
-       register_code(KC_F24);
+       register_code(WRAPPER);
        register_code(KC_C);
        unregister_code(KC_C);
-       unregister_code(KC_F24);
+       unregister_code(WRAPPER);
 	   leading_success = true;
     }
     SEQ_ONE_KEY(KC_P) {
       // LEAD + P
-       register_code(KC_F24);
+       register_code(WRAPPER);
        register_code(KC_D);
        unregister_code(KC_D);
-       unregister_code(KC_F24);	   
+       unregister_code(WRAPPER);	   
 	   leading_success = true;
     }
 	/*
@@ -1069,6 +1082,78 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 	  case G_JTHRW:
 		SEND_STRING (SS_TAP(X_SPACE));
 		SEND_STRING (SS_TAP(X_BTN1));
+		return false;
+	  case M_0:
+        register_code(WRAPPER);
+        register_code(KC_0);
+        unregister_code(KC_0);
+        unregister_code(WRAPPER);
+		return false;
+	  case M_1:
+        register_code(WRAPPER);
+        register_code(KC_1);
+        unregister_code(KC_1);
+        unregister_code(WRAPPER);
+		return false;
+	  case M_2:
+        register_code(WRAPPER);
+        register_code(KC_2);
+        unregister_code(KC_2);
+        unregister_code(WRAPPER);
+		return false;
+	  case M_3:
+        register_code(WRAPPER);
+        register_code(KC_3);
+        unregister_code(KC_3);
+        unregister_code(WRAPPER);
+		return false;
+	  case M_4:
+        register_code(WRAPPER);
+        register_code(KC_4);
+        unregister_code(KC_4);
+        unregister_code(WRAPPER);
+		return false;
+	  case M_5:
+        register_code(WRAPPER);
+        register_code(KC_5);
+        unregister_code(KC_5);
+        unregister_code(WRAPPER);
+		return false;
+	  case M_6:
+        register_code(WRAPPER);
+        register_code(KC_6);
+        unregister_code(KC_6);
+        unregister_code(WRAPPER);
+		return false;
+	  case M_7:
+        register_code(WRAPPER);
+        register_code(KC_7);
+        unregister_code(KC_7);
+        unregister_code(WRAPPER);
+		return false;
+	  case M_8:
+        register_code(WRAPPER);
+        register_code(KC_8);
+        unregister_code(KC_8);
+        unregister_code(WRAPPER);
+		return false;
+	  case M_9:
+        register_code(WRAPPER);
+        register_code(KC_9);
+        unregister_code(KC_9);
+        unregister_code(WRAPPER);
+		return false;
+	  case M_A:
+        register_code(WRAPPER);
+        register_code(KC_A);
+        unregister_code(KC_A);
+        unregister_code(WRAPPER);
+		return false;
+	  case M_B:
+        register_code(WRAPPER);
+        register_code(KC_B);
+        unregister_code(KC_B);
+        unregister_code(WRAPPER);
 		return false;
       #ifdef RGBLIGHT_ENABLE
       case RGB_SLD:
