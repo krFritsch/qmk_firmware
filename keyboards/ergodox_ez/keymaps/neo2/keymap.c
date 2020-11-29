@@ -991,11 +991,11 @@ void matrix_scan_user(void) {
        unregister_code(WRAPPER);	   
 	   leading_success = true;
     }
-    SEQ_THREE_KEYS(KC_S, KC_P, KC_Y) {
+    SEQ_THREE_KEYS(KC_S, KC_P, DE_Y) {
       // LEAD + S P Y
        register_code(WRAPPER);
-       register_code(KC_D);
-       unregister_code(KC_D);
+       register_code(KC_E);
+       unregister_code(KC_E);
        unregister_code(WRAPPER);
 	   leading_success = true;
     }
