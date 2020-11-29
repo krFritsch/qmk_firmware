@@ -432,9 +432,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                                        ,-------------.       ,-------------.
  *                                        |      |      |       |      |      |
  *                                 ,------|------|------|       |------+------+------.
- *                                 |      |      |      |       |      |      |      |
- *                                 |      |      |------|       |------|      |      |
- *                                 |      |      |      |       |      |      |      |
+ *                                 |select|select|      |       |      |      |      |
+ *                                 | prev.| next |------|       |------|      |      |
+ *                                 | word | word |      |       |      |      |      |
  *                                 `--------------------'       `--------------------'
  */
 [RightM4] = LAYOUT_ergodox(
@@ -446,7 +446,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
                                                KC_TRNS, KC_TRNS,
                                                         KC_TRNS,
-                                      KC_TRNS, KC_TRNS, KC_TRNS,
+                                   S(C(KC_LEFT)), S(C(KC_RGHT)), KC_TRNS,
   // right hand
   KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
   KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
@@ -989,6 +989,14 @@ void matrix_scan_user(void) {
        register_code(KC_D);
        unregister_code(KC_D);
        unregister_code(WRAPPER);	   
+	   leading_success = true;
+    }
+    SEQ_THREE_KEYS(KC_S, KC_P, KC_Y) {
+      // LEAD + S P Y
+       register_code(WRAPPER);
+       register_code(KC_D);
+       unregister_code(KC_D);
+       unregister_code(WRAPPER);
 	   leading_success = true;
     }
 	/*
