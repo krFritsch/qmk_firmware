@@ -234,11 +234,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
  * |CTL/Tab |   X  |   V  |   L  |   C  |   W  |FKeys |           |  ^Z  |   K  |   H  |   G  |   F  |   Q  | CTL/ß  |
  * |--------+------+------+------+------+------|      |           |(undo)|------+------+------+------+------+--------|
- * |   L3   |   U  |   I  |   A  |   E  |   O  |------|           |------|   S  |   N  |   R  |   T  |   D  |  Y     |
+ * |   L3   |   U  |   I  |   A  |   E  |   O  |------|           |------|   S  |   N  |   R  |   T  |   D  |  L3/Y  |
  * |--------+------+------+------+------+------| None |           |  ^Y  |------+------+------+------+------+--------|
  * | LShift |   Ü  |   Ö  |   Ä  |   P  |   Z  |      |           |(redo)|   B  |   M  |   ,  |   .  |   J  | RShift |
  * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   | L4 |  +#S  | None | GUI | LALT |                                       |  L4  | GUI |  APP  |  Enter  | L3 |
+ *   | L4 |  +#S  | None | GUI | LALT |                                       |  L4  | GUI |  APP  |  Enter  | None|
  *   `----------------------------------'                                       `----------------------------------'
  *                                        ,-------------.       ,-------------.
  *                                        | None | None |       | None |  None  |
@@ -261,9 +261,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // right hand
   M_7        , M_8 ,    M_9,     M_0   ,  M_A,    M_B,  KC_BSPC            ,
   C(DE_Z)    , DE_K,    DE_H,   DE_G    , DE_F  , DE_Q, MT(MOD_RCTL, DE_SS),
-               DE_S,    DE_N,   DE_R    , DE_T  , DE_D, DE_Y,
+               DE_S,    DE_N,   DE_R    , DE_T  , DE_D, LT(RightM3, DE_Y)  ,
   C(DE_Y)    , DE_B,    DE_M,   KC_COMMA, KC_DOT, DE_J, KC_RSFT            ,
-  MO(RightM4), KC_RGUI, KC_APP, KC_ENT , MO(RightM3),
+  MO(RightM4), KC_RGUI, KC_APP, KC_ENT , KC_TRNS,
   INC       , VIBE,
   DEC    ,
   MO(GREEK)  , KC_LEAD, KC_SPACE
