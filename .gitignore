@@ -74,3 +74,4 @@ __pycache__
 # prerequisites for updating ChibiOS
 /util/fmpp*
 lib\ugfx
+lib/ugfx
