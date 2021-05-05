@@ -16,14 +16,15 @@
 
 #include QMK_KEYBOARD_H
 #include "muse.h"
+#include "keymap_german.h"
 
 enum preonic_layers {
-  _QWERTY,
-  _COLEMAK,
-  _DVORAK,
-  _LOWER,
-  _RAISE,
-  _ADJUST
+  BASE,
+  LeftM3,
+  RightM3,
+  LeftM4,
+  RightM4,
+  MOUSE
 };
 
 enum preonic_keycodes {
@@ -37,136 +38,187 @@ enum preonic_keycodes {
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
-/* Qwerty
- * ,-----------------------------------------------------------------------------------.
- * |   `  |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  | Bksp |
- * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | Tab  |   Q  |   W  |   E  |   R  |   T  |   Y  |   U  |   I  |   O  |   P  | Del  |
- * |------+------+------+------+------+-------------+------+------+------+------+------|
- * | Esc  |   A  |   S  |   D  |   F  |   G  |   H  |   J  |   K  |   L  |   ;  |  "   |
- * |------+------+------+------+------+------|------+------+------+------+------+------|
- * | Shift|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  |Enter |
- * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | Brite| Ctrl | Alt  | GUI  |Lower |    Space    |Raise | Left | Down |  Up  |Right |
- * `-----------------------------------------------------------------------------------'
+/* Keymap 00: default layer
+ * Ascii-art generator: http://patorjk.com/software/taag/#p=display&f=Big&t=Mouse
+ *      _           __                   _   _       _                               
+ *     | |         / _|                 | | | |     | |                              
+ *   __| |   ___  | |_    __ _   _   _  | | | |_    | |   __ _   _   _    ___   _ __ 
+ *  / _` |  / _ \ |  _|  / _` | | | | | | | | __|   | |  / _` | | | | |  / _ \ | '__|
+ * | (_| | |  __/ | |   | (_| | | |_| | | | | |_    | | | (_| | | |_| | |  __/ | |   
+ *  \__,_|  \___| |_|    \__,_|  \__,_| |_|  \__|   |_|  \__,_|  \__, |  \___| |_|   
+ *                                                                __/ |              
+ *                                                               |___/                
+ * 
+ * ,-------------------------------------------------------------------------------------.
+ * |  ESC  |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  | Bksp  |
+ * |-------+------+------+------+------+------+------+------+------+------+------+-------|
+ * |CTL/Tab|   X  |   V  |   L  |   C  |   W  |   K  |   H  |   G  |   F  |   Q  | CTL/ß |
+ * |-------+------+------+------+------+-------------+------+------+------+------+-------|
+ * |  L3   |   U  |   I  |   A  |   E  |   O  |   S  |   N  |   R  |   T  |   D  | L3/Y  |
+ * |-------+------+------+------+------+------|------+------+------+------+------+-------|
+ * | LShift|   Ü  |   Ö  |   Ä  |   P  |   Z  |   B  |   M  |   ,  |   .  |   J  |RShift |
+ * |-------+------+------+------+------+------+------+------+------+------+------+-------|
+ * |   L4  | +#S  | GUI  | LALT |CtlBsp| MOUSE | LEAD |  SPC | L4 | GUI  | App  | Enter  |
+ * `-------------------------------------------------------------------------------------'
  */
-[_QWERTY] = LAYOUT_preonic_grid( \
-  KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC, \
-  KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_DEL,  \
-  KC_ESC,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT, \
-  KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_ENT,  \
-  BACKLIT, KC_LCTL, KC_LALT, KC_LGUI, LOWER,   KC_SPC,  KC_SPC,  RAISE,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT  \
+[BASE] = LAYOUT_preonic_grid( \
+  KC_ESC              ,       KC_1,    KC_2,    KC_3,          KC_4,               KC_5,     KC_6,    KC_7,        KC_8,    KC_9,   KC_0,             KC_BSPC, \
+  MT(MOD_LCTL, KC_TAB),       DE_X,    DE_V,    DE_L,          DE_C,               DE_W,     DE_K,    DE_H,        DE_G,    DE_F,   DE_Q, MT(MOD_RCTL, DE_SS),  \
+  MO(LeftM3)          ,       DE_U,    DE_I,    DE_A,          DE_E,               DE_O,     DE_S,    DE_N,        DE_R,    DE_T,   DE_D,   LT(RightM3, DE_Y), \
+  KC_LSFT             ,    DE_UDIA, DE_ODIA, DE_ADIA,          DE_P,               DE_Z,     DE_B,    DE_M,    KC_COMMA,  KC_DOT,   DE_J,             KC_RSFT,  \
+  MO(LeftM4)          , G(S(DE_S)), KC_LGUI, KC_LALT, LCTL(KC_BSPC), LT(MOUSE, KC_TRNS), KC_LEAD, KC_SPACE, MO(RightM4), KC_RGUI, KC_APP,              KC_ENT  \
 ),
 
-/* Colemak
- * ,-----------------------------------------------------------------------------------.
- * |   `  |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  | Bksp |
- * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | Tab  |   Q  |   W  |   F  |   P  |   G  |   J  |   L  |   U  |   Y  |   ;  | Del  |
- * |------+------+------+------+------+-------------+------+------+------+------+------|
- * | Esc  |   A  |   R  |   S  |   T  |   D  |   H  |   N  |   E  |   I  |   O  |  "   |
- * |------+------+------+------+------+------|------+------+------+------+------+------|
- * | Shift|   Z  |   X  |   C  |   V  |   B  |   K  |   M  |   ,  |   .  |   /  |Enter |
- * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | Brite| Ctrl | Alt  | GUI  |Lower |    Space    |Raise | Left | Down |  Up  |Right |
- * `-----------------------------------------------------------------------------------'
+/* Keymap 00: default layer
+ *  __  __               _   _    __   _                   ____      _        ______   ______   _______ 
+ * |  \/  |             | | (_)  / _| (_)                 |___ \    | |      |  ____| |  ____| |__   __|
+ * | \  / |   ___     __| |  _  | |_   _    ___   _ __      __) |   | |      | |__    | |__       | |   
+ * | |\/| |  / _ \   / _` | | | |  _| | |  / _ \ | '__|    |__ <    | |      |  __|   |  __|      | |   
+ * | |  | | | (_) | | (_| | | | | |   | | |  __/ | |       ___) |   | |____  | |____  | |         | |   
+ * |_|  |_|  \___/   \__,_| |_| |_|   |_|  \___| |_|      |____/    |______| |______| |_|         |_|                     
+ *                                                
+ * 
+ * ,-------------------------------------------------------------------------------------.
+ * |  ESC  |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  | Bksp  |
+ * |-------+------+------+------+------+------+------+------+------+------+------+-------|
+ * |CTL/Tab|   X  |   V  |   L  |   C  |   W  |   K  |   H  |   G  |   F  |   Q  | CTL/ß |
+ * |-------+------+------+------+------+-------------+------+------+------+------+-------|
+ * |  L3   |   U  |   I  |   A  |   E  |   O  |   S  |   N  |   R  |   T  |   D  | L3/Y  |
+ * |-------+------+------+------+------+------|------+------+------+------+------+-------|
+ * | LShift|   Ü  |   Ö  |   Ä  |   P  |   Z  |   B  |   M  |   ,  |   .  |   J  |RShift |
+ * |-------+------+------+------+------+------+------+------+------+------+------+-------|
+ * |   L4  | +#S  | GUI  | LALT |CtlBsp| MOUSE | LEAD |  SPC | L4 | GUI  | App  | Enter  |
+ * `-------------------------------------------------------------------------------------'
  */
-[_COLEMAK] = LAYOUT_preonic_grid( \
-  KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC, \
-  KC_TAB,  KC_Q,    KC_W,    KC_F,    KC_P,    KC_G,    KC_J,    KC_L,    KC_U,    KC_Y,    KC_SCLN, KC_DEL,  \
-  KC_ESC,  KC_A,    KC_R,    KC_S,    KC_T,    KC_D,    KC_H,    KC_N,    KC_E,    KC_I,    KC_O,    KC_QUOT, \
-  KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_K,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_ENT,  \
-  BACKLIT, KC_LCTL, KC_LALT, KC_LGUI, LOWER,   KC_SPC,  KC_SPC,  RAISE,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT  \
+[LeftM3] = LAYOUT_preonic_grid( \
+  KC_ESC              ,       KC_1,    KC_2,    KC_3,          KC_4,               KC_5,     KC_6,    KC_7,        KC_8,    KC_9,   KC_0,             KC_BSPC, \
+  MT(MOD_LCTL, KC_TAB),       DE_X,    DE_V,    DE_L,          DE_C,               DE_W,     DE_K,    DE_H,        DE_G,    DE_F,   DE_Q, MT(MOD_RCTL, DE_SS),  \
+  MO(LeftM3)          ,       DE_U,    DE_I,    DE_A,          DE_E,               DE_O,     DE_S,    DE_N,        DE_R,    DE_T,   DE_D,   LT(RightM3, DE_Y), \
+  KC_LSFT             ,    DE_UDIA, DE_ODIA, DE_ADIA,          DE_P,               DE_Z,     DE_B,    DE_M,    KC_COMMA,  KC_DOT,   DE_J,             KC_RSFT,  \
+  MO(LeftM4)          , G(S(DE_S)), KC_LGUI, KC_LALT, LCTL(KC_BSPC), LT(MOUSE, KC_TRNS), KC_LEAD, KC_SPACE, MO(RightM4), KC_RGUI, KC_APP,              KC_ENT  \
 ),
 
-/* Dvorak
- * ,-----------------------------------------------------------------------------------.
- * |   `  |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  | Bksp |
- * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | Tab  |   "  |   ,  |   .  |   P  |   Y  |   F  |   G  |   C  |   R  |   L  | Del  |
- * |------+------+------+------+------+-------------+------+------+------+------+------|
- * | Esc  |   A  |   O  |   E  |   U  |   I  |   D  |   H  |   T  |   N  |   S  |  /   |
- * |------+------+------+------+------+------|------+------+------+------+------+------|
- * | Shift|   ;  |   Q  |   J  |   K  |   X  |   B  |   M  |   W  |   V  |   Z  |Enter |
- * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | Brite| Ctrl | Alt  | GUI  |Lower |    Space    |Raise | Left | Down |  Up  |Right |
- * `-----------------------------------------------------------------------------------'
+/* Keymap 00: default layer
+ * Ascii-art generator: http://patorjk.com/software/taag/#p=display&f=Big&t=Mouse
+ *  __  __               _   _    __   _                   ____      _____    _____    _____   _    _   _______ 
+ * |  \/  |             | | (_)  / _| (_)                 |___ \    |  __ \  |_   _|  / ____| | |  | | |__   __|
+ * | \  / |   ___     __| |  _  | |_   _    ___   _ __      __) |   | |__) |   | |   | |  __  | |__| |    | |   
+ * | |\/| |  / _ \   / _` | | | |  _| | |  / _ \ | '__|    |__ <    |  _  /    | |   | | |_ | |  __  |    | |   
+ * | |  | | | (_) | | (_| | | | | |   | | |  __/ | |       ___) |   | | \ \   _| |_  | |__| | | |  | |    | |   
+ * |_|  |_|  \___/   \__,_| |_| |_|   |_|  \___| |_|      |____/    |_|  \_\ |_____|  \_____| |_|  |_|    |_|   
+ *
+ * ,-------------------------------------------------------------------------------------.
+ * |  ESC  |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  | Bksp  |
+ * |-------+------+------+------+------+------+------+------+------+------+------+-------|
+ * |CTL/Tab|   X  |   V  |   L  |   C  |   W  |   K  |   H  |   G  |   F  |   Q  | CTL/ß |
+ * |-------+------+------+------+------+-------------+------+------+------+------+-------|
+ * |  L3   |   U  |   I  |   A  |   E  |   O  |   S  |   N  |   R  |   T  |   D  | L3/Y  |
+ * |-------+------+------+------+------+------|------+------+------+------+------+-------|
+ * | LShift|   Ü  |   Ö  |   Ä  |   P  |   Z  |   B  |   M  |   ,  |   .  |   J  |RShift |
+ * |-------+------+------+------+------+------+------+------+------+------+------+-------|
+ * |   L4  | +#S  | GUI  | LALT |CtlBsp| MOUSE | LEAD |  SPC | L4 | GUI  | App  | Enter  |
+ * `-------------------------------------------------------------------------------------'
  */
-[_DVORAK] = LAYOUT_preonic_grid( \
-  KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC, \
-  KC_TAB,  KC_QUOT, KC_COMM, KC_DOT,  KC_P,    KC_Y,    KC_F,    KC_G,    KC_C,    KC_R,    KC_L,    KC_DEL,  \
-  KC_ESC,  KC_A,    KC_O,    KC_E,    KC_U,    KC_I,    KC_D,    KC_H,    KC_T,    KC_N,    KC_S,    KC_SLSH, \
-  KC_LSFT, KC_SCLN, KC_Q,    KC_J,    KC_K,    KC_X,    KC_B,    KC_M,    KC_W,    KC_V,    KC_Z,    KC_ENT,  \
-  BACKLIT, KC_LCTL, KC_LALT, KC_LGUI, LOWER,   KC_SPC,  KC_SPC,  RAISE,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT  \
+[RightM3] = LAYOUT_preonic_grid( \
+  KC_ESC              ,       KC_1,    KC_2,    KC_3,          KC_4,               KC_5,     KC_6,    KC_7,        KC_8,    KC_9,   KC_0,             KC_BSPC, \
+  MT(MOD_LCTL, KC_TAB),       DE_X,    DE_V,    DE_L,          DE_C,               DE_W,     DE_K,    DE_H,        DE_G,    DE_F,   DE_Q, MT(MOD_RCTL, DE_SS),  \
+  MO(LeftM3)          ,       DE_U,    DE_I,    DE_A,          DE_E,               DE_O,     DE_S,    DE_N,        DE_R,    DE_T,   DE_D,   LT(RightM3, DE_Y), \
+  KC_LSFT             ,    DE_UDIA, DE_ODIA, DE_ADIA,          DE_P,               DE_Z,     DE_B,    DE_M,    KC_COMMA,  KC_DOT,   DE_J,             KC_RSFT,  \
+  MO(LeftM4)          , G(S(DE_S)), KC_LGUI, KC_LALT, LCTL(KC_BSPC), LT(MOUSE, KC_TRNS), KC_LEAD, KC_SPACE, MO(RightM4), KC_RGUI, KC_APP,              KC_ENT  \
 ),
 
-/* Lower
- * ,-----------------------------------------------------------------------------------.
- * |   ~  |   !  |   @  |   #  |   $  |   %  |   ^  |   &  |   *  |   (  |   )  | Bksp |
- * |------+------+------+------+------+-------------+------+------+------+------+------|
- * |   ~  |   !  |   @  |   #  |   $  |   %  |   ^  |   &  |   *  |   (  |   )  | Del  |
- * |------+------+------+------+------+-------------+------+------+------+------+------|
- * | Del  |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |   _  |   +  |   {  |   }  |  |   |
- * |------+------+------+------+------+------|------+------+------+------+------+------|
- * |      |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 |ISO ~ |ISO | |      |      |      |
- * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |      |      |      |             |      | Next | Vol- | Vol+ | Play |
- * `-----------------------------------------------------------------------------------'
+/* Keymap 00: default layer
+ * Ascii-art generator: http://patorjk.com/software/taag/#p=display&f=Big&t=Mouse
+ *  __  __               _   _    __   _                   _  _       _        ______   ______   _______ 
+ * |  \/  |             | | (_)  / _| (_)                 | || |     | |      |  ____| |  ____| |__   __|
+ * | \  / |   ___     __| |  _  | |_   _    ___   _ __    | || |_    | |      | |__    | |__       | |   
+ * | |\/| |  / _ \   / _` | | | |  _| | |  / _ \ | '__|   |__   _|   | |      |  __|   |  __|      | |   
+ * | |  | | | (_) | | (_| | | | | |   | | |  __/ | |         | |     | |____  | |____  | |         | |   
+ * |_|  |_|  \___/   \__,_| |_| |_|   |_|  \___| |_|         |_|     |______| |______| |_|         |_|   
+ *
+ * ,-------------------------------------------------------------------------------------.
+ * |  ESC  |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  | Bksp  |
+ * |-------+------+------+------+------+------+------+------+------+------+------+-------|
+ * |CTL/Tab|   X  |   V  |   L  |   C  |   W  |   K  |   H  |   G  |   F  |   Q  | CTL/ß |
+ * |-------+------+------+------+------+-------------+------+------+------+------+-------|
+ * |  L3   |   U  |   I  |   A  |   E  |   O  |   S  |   N  |   R  |   T  |   D  | L3/Y  |
+ * |-------+------+------+------+------+------|------+------+------+------+------+-------|
+ * | LShift|   Ü  |   Ö  |   Ä  |   P  |   Z  |   B  |   M  |   ,  |   .  |   J  |RShift |
+ * |-------+------+------+------+------+------+------+------+------+------+------+-------|
+ * |   L4  | +#S  | GUI  | LALT |CtlBsp| MOUSE | LEAD |  SPC | L4 | GUI  | App  | Enter  |
+ * `-------------------------------------------------------------------------------------'
  */
-[_LOWER] = LAYOUT_preonic_grid( \
-  KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_BSPC, \
-  KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_DEL,  \
-  KC_DEL,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_UNDS, KC_PLUS, KC_LCBR, KC_RCBR, KC_PIPE, \
-  _______, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,S(KC_NUHS),S(KC_NUBS),KC_HOME, KC_END, _______, \
-  _______, _______, _______, _______, _______, _______, _______, _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY \
+[LeftM4] = LAYOUT_preonic_grid( \
+  KC_ESC              ,       KC_1,    KC_2,    KC_3,          KC_4,               KC_5,     KC_6,    KC_7,        KC_8,    KC_9,   KC_0,             KC_BSPC, \
+  MT(MOD_LCTL, KC_TAB),       DE_X,    DE_V,    DE_L,          DE_C,               DE_W,     DE_K,    DE_H,        DE_G,    DE_F,   DE_Q, MT(MOD_RCTL, DE_SS),  \
+  MO(LeftM3)          ,       DE_U,    DE_I,    DE_A,          DE_E,               DE_O,     DE_S,    DE_N,        DE_R,    DE_T,   DE_D,   LT(RightM3, DE_Y), \
+  KC_LSFT             ,    DE_UDIA, DE_ODIA, DE_ADIA,          DE_P,               DE_Z,     DE_B,    DE_M,    KC_COMMA,  KC_DOT,   DE_J,             KC_RSFT,  \
+  MO(LeftM4)          , G(S(DE_S)), KC_LGUI, KC_LALT, LCTL(KC_BSPC), LT(MOUSE, KC_TRNS), KC_LEAD, KC_SPACE, MO(RightM4), KC_RGUI, KC_APP,              KC_ENT  \
 ),
 
-/* Raise
- * ,-----------------------------------------------------------------------------------.
- * |   `  |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  | Bksp |
- * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |   `  |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  | Del  |
- * |------+------+------+------+------+-------------+------+------+------+------+------|
- * | Del  |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |   -  |   =  |   [  |   ]  |  \   |
- * |------+------+------+------+------+------|------+------+------+------+------+------|
- * |      |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 |ISO # |ISO / |      |      |      |
- * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |      |      |      |             |      | Next | Vol- | Vol+ | Play |
- * `-----------------------------------------------------------------------------------'
+/* Keymap 00: default layer
+ * Ascii-art generator: http://patorjk.com/software/taag/#p=display&f=Big&t=Mouse
+ *  __  __               _   _    __   _                   _  _       _____    _____    _____   _    _   _______ 
+ * |  \/  |             | | (_)  / _| (_)                 | || |     |  __ \  |_   _|  / ____| | |  | | |__   __|
+ * | \  / |   ___     __| |  _  | |_   _    ___   _ __    | || |_    | |__) |   | |   | |  __  | |__| |    | |   
+ * | |\/| |  / _ \   / _` | | | |  _| | |  / _ \ | '__|   |__   _|   |  _  /    | |   | | |_ | |  __  |    | |   
+ * | |  | | | (_) | | (_| | | | | |   | | |  __/ | |         | |     | | \ \   _| |_  | |__| | | |  | |    | |   
+ * |_|  |_|  \___/   \__,_| |_| |_|   |_|  \___| |_|         |_|     |_|  \_\ |_____|  \_____| |_|  |_|    |_|   
+ * 
+ * ,-------------------------------------------------------------------------------------.
+ * |  ESC  |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  | Bksp  |
+ * |-------+------+------+------+------+------+------+------+------+------+------+-------|
+ * |CTL/Tab|   X  |   V  |   L  |   C  |   W  |   K  |   H  |   G  |   F  |   Q  | CTL/ß |
+ * |-------+------+------+------+------+-------------+------+------+------+------+-------|
+ * |  L3   |   U  |   I  |   A  |   E  |   O  |   S  |   N  |   R  |   T  |   D  | L3/Y  |
+ * |-------+------+------+------+------+------|------+------+------+------+------+-------|
+ * | LShift|   Ü  |   Ö  |   Ä  |   P  |   Z  |   B  |   M  |   ,  |   .  |   J  |RShift |
+ * |-------+------+------+------+------+------+------+------+------+------+------+-------|
+ * |   L4  | +#S  | GUI  | LALT |CtlBsp| MOUSE | LEAD |  SPC | L4 | GUI  | App  | Enter  |
+ * `-------------------------------------------------------------------------------------'
  */
-[_RAISE] = LAYOUT_preonic_grid( \
-  KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC, \
-  KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_DEL,  \
-  KC_DEL,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_MINS, KC_EQL,  KC_LBRC, KC_RBRC, KC_BSLS, \
-  _______, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_NUHS, KC_NUBS, KC_PGUP, KC_PGDN, _______, \
-  _______, _______, _______, _______, _______, _______, _______, _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY  \
+[RightM4] = LAYOUT_preonic_grid( \
+  KC_ESC              ,       KC_1,    KC_2,    KC_3,          KC_4,               KC_5,     KC_6,    KC_7,        KC_8,    KC_9,   KC_0,             KC_BSPC, \
+  MT(MOD_LCTL, KC_TAB),       DE_X,    DE_V,    DE_L,          DE_C,               DE_W,     DE_K,    DE_H,        DE_G,    DE_F,   DE_Q, MT(MOD_RCTL, DE_SS),  \
+  MO(LeftM3)          ,       DE_U,    DE_I,    DE_A,          DE_E,               DE_O,     DE_S,    DE_N,        DE_R,    DE_T,   DE_D,   LT(RightM3, DE_Y), \
+  KC_LSFT             ,    DE_UDIA, DE_ODIA, DE_ADIA,          DE_P,               DE_Z,     DE_B,    DE_M,    KC_COMMA,  KC_DOT,   DE_J,             KC_RSFT,  \
+  MO(LeftM4)          , G(S(DE_S)), KC_LGUI, KC_LALT, LCTL(KC_BSPC), LT(MOUSE, KC_TRNS), KC_LEAD, KC_SPACE, MO(RightM4), KC_RGUI, KC_APP,              KC_ENT  \
 ),
 
-/* Adjust (Lower + Raise)
- * ,-----------------------------------------------------------------------------------.
- * |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 |
- * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      | Reset|      |      |      |      |      |      |      |      |      |  Del |
- * |------+------+------+------+------+-------------+------+------+------+------+------|
- * |      |      |      |Aud on|AudOff|AGnorm|AGswap|Qwerty|Colemk|Dvorak|      |      |
- * |------+------+------+------+------+------|------+------+------+------+------+------|
- * |      |Voice-|Voice+|Mus on|MusOff|MidiOn|MidOff|      |      |      |      |      |
- * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |      |      |      |             |      |      |      |      |      |
- * `-----------------------------------------------------------------------------------'
+/* Keymap 00: default layer
+ * Ascii-art generator: http://patorjk.com/software/taag/#p=display&f=Big&t=Mouse
+ *  __  __                              
+ * |  \/  |                             
+ * | \  / |   ___    _   _   ___    ___ 
+ * | |\/| |  / _ \  | | | | / __|  / _ \
+ * | |  | | | (_) | | |_| | \__ \ |  __/
+ * |_|  |_|  \___/   \__,_| |___/  \___|
+ *
+ * ,-------------------------------------------------------------------------------------.
+ * |  ESC  |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  | Bksp  |
+ * |-------+------+------+------+------+------+------+------+------+------+------+-------|
+ * |CTL/Tab|   X  |   V  |   L  |   C  |   W  |   K  |   H  |   G  |   F  |   Q  | CTL/ß |
+ * |-------+------+------+------+------+-------------+------+------+------+------+-------|
+ * |  L3   |   U  |   I  |   A  |   E  |   O  |   S  |   N  |   R  |   T  |   D  | L3/Y  |
+ * |-------+------+------+------+------+------|------+------+------+------+------+-------|
+ * | LShift|   Ü  |   Ö  |   Ä  |   P  |   Z  |   B  |   M  |   ,  |   .  |   J  |RShift |
+ * |-------+------+------+------+------+------+------+------+------+------+------+-------|
+ * |   L4  | +#S  | GUI  | LALT |CtlBsp| MOUSE | LEAD |  SPC | L4 | GUI  | App  | Enter  |
+ * `-------------------------------------------------------------------------------------'
  */
-[_ADJUST] = LAYOUT_preonic_grid( \
-  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  \
-  _______, RESET,   DEBUG,   _______, _______, _______, _______, TERM_ON, TERM_OFF,_______, _______, KC_DEL,  \
-  _______, _______, MU_MOD,  AU_ON,   AU_OFF,  AG_NORM, AG_SWAP, QWERTY,  COLEMAK, DVORAK,  _______, _______, \
-  _______, MUV_DE,  MUV_IN,  MU_ON,   MU_OFF,  MI_ON,   MI_OFF,  _______, _______, _______, _______, _______, \
-  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______  \
+[MOUSE] = LAYOUT_preonic_grid( \
+  KC_ESC              ,       KC_1,    KC_2,    KC_3,          KC_4,               KC_5,     KC_6,    KC_7,        KC_8,    KC_9,   KC_0,             KC_BSPC, \
+  MT(MOD_LCTL, KC_TAB),       DE_X,    DE_V,    DE_L,          DE_C,               DE_W,     DE_K,    DE_H,        DE_G,    DE_F,   DE_Q, MT(MOD_RCTL, DE_SS),  \
+  MO(LeftM3)          ,       DE_U,    DE_I,    DE_A,          DE_E,               DE_O,     DE_S,    DE_N,        DE_R,    DE_T,   DE_D,   LT(RightM3, DE_Y), \
+  KC_LSFT             ,    DE_UDIA, DE_ODIA, DE_ADIA,          DE_P,               DE_Z,     DE_B,    DE_M,    KC_COMMA,  KC_DOT,   DE_J,             KC_RSFT,  \
+  MO(LeftM4)          , G(S(DE_S)), KC_LGUI, KC_LALT, LCTL(KC_BSPC), LT(MOUSE, KC_TRNS), KC_LEAD, KC_SPACE, MO(RightM4), KC_RGUI, KC_APP,              KC_ENT  \
 )
+
 
 
 };
 
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+/* bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
         case QWERTY:
           if (record->event.pressed) {
@@ -225,15 +277,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
           break;
       }
     return true;
-};
+}; */
 
-bool muse_mode = false;
+/* bool muse_mode = false;
 uint8_t last_muse_note = 0;
 uint16_t muse_counter = 0;
 uint8_t muse_offset = 70;
-uint16_t muse_tempo = 50;
+uint16_t muse_tempo = 50; */
 
-void encoder_update_user(uint8_t index, bool clockwise) {
+/* void encoder_update_user(uint8_t index, bool clockwise) {
   if (muse_mode) {
     if (IS_LAYER_ON(_RAISE)) {
       if (clockwise) {
@@ -257,9 +309,9 @@ void encoder_update_user(uint8_t index, bool clockwise) {
       unregister_code(KC_PGUP);
     }
   }
-}
+} */
 
-void dip_switch_update_user(uint8_t index, bool active) {
+/* void dip_switch_update_user(uint8_t index, bool active) {
     switch (index) {
         case 0:
             if (active) {
@@ -276,9 +328,9 @@ void dip_switch_update_user(uint8_t index, bool active) {
             }
     }
 }
+ */
 
-
-void matrix_scan_user(void) {
+/* void matrix_scan_user(void) {
 #ifdef AUDIO_ENABLE
     if (muse_mode) {
         if (muse_counter == 0) {
@@ -307,4 +359,4 @@ bool music_mask_user(uint16_t keycode) {
     default:
       return true;
   }
-}
+} */
