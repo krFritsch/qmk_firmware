@@ -25,6 +25,14 @@
 
 #define MIDI_BASIC
 
+
+#define LEADER_TIMEOUT 300
+#define LEADER_PER_KEY_TIMING
+#define PERMISSIVE_HOLD
+
+
+
+
 /* enable advanced MIDI features:
    - MIDI notes can be added to the keymap
    - Octave shift and transpose
